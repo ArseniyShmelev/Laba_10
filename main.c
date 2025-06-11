@@ -31,7 +31,6 @@ int main(void)
         long count = sizes[s];
         printf("\n--- Testing size: %ld ---\n", count);
 
-        // Массивы для хранения результатов всех хеш-функций для данного размера
         long collisions[3] = { 0 };
         double times[3] = { 0.0 };
 
@@ -51,12 +50,10 @@ int main(void)
                 continue;
             }
 
-            // Заполняем данными
             for (long i = 0; i < count; ++i) {
                 data[i] = malloc(sizeof(Winner));
                 if (!data[i]) {
                     printf("Failed to allocate memory for Winner\n");
-                    // Освобождаем уже выделенную память
                     for (long j = 0; j < i; ++j) {
                         free(data[j]);
                     }
@@ -75,26 +72,25 @@ int main(void)
                 add_entry(table, key, data[i]);
             }
 
-            // Поиск случайного элемента (повторяем много раз для точного измерения)
+            
             char* target = data[rand() % count]->full_name;
 
-            // Делаем много поисков для более точного измерения времени
-            const int num_searches = 1000000; // Увеличиваем до миллиона поисков
+            
+            const int num_searches = 1000000; 
             clock_t start = clock();
             for (int i = 0; i < num_searches; i++) {
                 search_all(table, target);
             }
             clock_t end = clock();
-            double t = get_time_diff(start, end) / num_searches; // Среднее время на один поиск
+            double t = get_time_diff(start, end) / num_searches; 
 
-            // Сохраняем результаты
+            
             collisions[f] = table->collisions;
             times[f] = t;
 
             printf("Hash%d | Collisions: %ld | Time: %.9f sec | Fill Factor: %.2f\n",
                 f + 1, table->collisions, t, (double)table->size / table->capacity);
 
-            // Освобождаем память
             for (long i = 0; i < count; ++i) {
                 free(data[i]);
             }
@@ -104,7 +100,7 @@ int main(void)
         next_iteration:;
         }
 
-        // Записываем результаты в файлы (одна строка на размер)
+        
         fprintf(collisions_file, "%ld,%ld,%ld,%ld\n", count, collisions[0], collisions[1], collisions[2]);
         fprintf(time_file, "%ld,%.9f,%.9f,%.9f\n", count, times[0], times[1], times[2]);
     }
@@ -112,7 +108,6 @@ int main(void)
     fclose(collisions_file);
     fclose(time_file);
 
-    // Получаем текущую директорию для информации пользователю
     printf("\nTest complete. Results saved to:\n");
     printf("- collision.csv (in current working directory)\n");
     printf("- time.csv (in current working directory)\n");

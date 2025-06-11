@@ -57,9 +57,8 @@ void gen_subject(char* subject)
 double get_time_diff(clock_t start, clock_t end)
 {
     double diff = (double)(end - start) / CLOCKS_PER_SEC;
-    // Если разница слишком мала, возвращаем минимально измеримое время
     if (diff < 1e-9) {
-        diff = 1e-9; // 1 наносекунда
+        diff = 1e-9; 
     }
     return diff;
 }
@@ -198,15 +197,13 @@ void add_entry(hashtable* table, char* key, void* value)
     long index = table->hash_func(key) % table->capacity;
     Node* current = table->entries[index];
 
-    // Проверяем, есть ли уже такой ключ
     while (current != NULL) {
         if (strcmp(current->key, key) == 0) {
-            return; // Ключ уже существует
+            return; 
         }
         current = current->next;
     }
 
-    // Увеличиваем счетчик коллизий, если в этой позиции уже есть элемент
     if (table->entries[index] != NULL) {
         table->collisions++;
     }
