@@ -14,7 +14,6 @@ int main(void)
     printf("Hash Table Performance Test\n");
     printf("===========================\n");
     printf("Testing hash functions with different table sizes\n");
-    printf("Each time measurement is average of 1,000,000 searches\n\n");
 
     FILE* collisions_file = fopen("collision.csv", "w");
     FILE* time_file = fopen("time.csv", "w");
@@ -108,9 +107,7 @@ int main(void)
     fclose(collisions_file);
     fclose(time_file);
 
-    printf("\nTest complete. Results saved to:\n");
-    printf("- collision.csv (in current working directory)\n");
-    printf("- time.csv (in current working directory)\n");
+    printf("\nTest complete.\n");
 
     return 0;
 }
